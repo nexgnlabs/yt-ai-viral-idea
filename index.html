@@ -14,11 +14,12 @@
         select { background: #222; color: #fff; border: 1px solid #444; }
         .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; }
         .btn:hover { background: #b30000; transform: translateY(-2px); }
-        .result-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-        .idea-card { background: #222; padding: 20px; border-radius: 10px; border-left: 4px solid var(--accent); position: relative; }
-        .viral-badge { position: absolute; top: 10px; right: 10px; background: #00d4ff22; color: var(--accent); font-size: 10px; padding: 3px 7px; border-radius: 4px; }
-        .title { font-weight: 800; color: #fff; margin-bottom: 10px; display: block; }
-        .desc { font-size: 13px; color: #aaa; line-height: 1.4; }
+        .result-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .idea-card { background: #222; padding: 20px; border-radius: 10px; border-left: 4px solid var(--accent); position: relative; display: flex; flex-direction: column; }
+        .viral-badge { position: absolute; top: 10px; right: 10px; background: #00d4ff22; color: var(--accent); font-size: 10px; padding: 3px 7px; border-radius: 4px; font-weight: bold;}
+        .title { font-weight: 800; color: #fff; margin-bottom: 10px; font-size: 16px; padding-right: 60px; }
+        .desc { font-size: 14px; color: #ddd; line-height: 1.5; background: #2a2a2a; padding: 10px; border-radius: 5px; }
+        .desc b { color: var(--accent); }
         #loader { display: none; text-align: center; color: var(--accent); padding: 20px; font-weight: bold; }
     </style>
 </head>
@@ -26,8 +27,8 @@
 
 <div class="app-shell">
     <div class="header">
-        <h1 style="margin:0;">🔥 Viral Trend Engine 2025</h1>
-        <p style="color:#888;">Powered by Gemini 3 Pro & GPT-5</p>
+        <h1 style="margin:0;">🔥 AI Viral Video Architect</h1>
+        <p style="color:#888;">Live Search: Gemini 3 Pro & GPT-5 Integration</p>
     </div>
 
     <div class="grid-controls">
@@ -47,10 +48,10 @@
             <option value="Comedy">😂 Comedy (Memes/Skits)</option>
             <option value="Nonprofits">✊ Nonprofits & Activism</option>
         </select>
-        <button class="btn" onclick="generateViralIdeas()">GENERATE IDEAS</button>
+        <button class="btn" onclick="generateViralIdeas()">SEARCH TRENDS & GENERATE</button>
     </div>
 
-    <div id="loader">⚡ ANALYZING INDIA SEARCH TRENDS (DEC 23, 2025)...</div>
+    <div id="loader">⚡ AI is scanning YouTube India & Google Trends...</div>
     <div id="output" class="result-container"></div>
 </div>
 
@@ -63,39 +64,44 @@ async function generateViralIdeas() {
     loader.style.display = 'block';
     output.innerHTML = '';
 
-    // Advanced prompt logic for Gemini 3 / GPT-5
-    const prompt = `It is Dec 23, 2025. Generate 4 VIRAL YouTube video ideas for the category "${cat}" specifically for the Indian market.
-    Include:
-    1. A Clickbait (but true) Title.
-    2. A brief 'Why it works' reason based on Dec 2025 trends (e.g., Pushpa 2 success, Kumbh Mela prep, AI advancements).
-    Format as JSON array: [{"title": "...", "why": "..."}]`;
+    // THE PROMPT: Telling the AI to behave like a Trend Analyst using Hinglish
+    const prompt = `System: You are an expert YouTube Trend Analyst for the Indian Market. 
+    Current Date: Dec 23, 2025.
+    Task: Identify 4 real-world ongoing viral topics in India for the category "${cat}".
+    Instructions: 
+    1. Create a high-CTR English title.
+    2. Write the "Why it works" section in natural "Hinglish" (everyday Hindi mixed with English) just like a friend explains to another.
+    3. Use current events (e.g. Pushpa 2, IPL 2026 prep, AI tools, specific December memes).
+    
+    Output strictly as a JSON array only: [{"title": "...", "why": "..."}]`;
 
     try {
+        // Calling Puter's AI Chat (which uses the highest available models like Gemini/GPT)
         const response = await puter.ai.chat(prompt);
-        // Clean the response in case AI adds markdown
-        const cleanJson = response.toString().replace(/```json|```/g, '').trim();
-        const ideas = JSON.parse(cleanJson);
+        
+        // Handling Markdown blocks if AI includes them
+        let cleanStr = response.toString();
+        if (cleanStr.includes("```json")) {
+            cleanStr = cleanStr.split("```json")[1].split("```")[0];
+        } else if (cleanStr.includes("```")) {
+            cleanStr = cleanStr.split("```")[1].split("```")[0];
+        }
+        
+        const ideas = JSON.parse(cleanStr.trim());
 
         ideas.forEach(idea => {
             const div = document.createElement('div');
             div.className = 'idea-card';
             div.innerHTML = `
-                <div class="viral-badge">EXPLODING</div>
+                <div class="viral-badge">LIVE TREND</div>
                 <span class="title">${idea.title}</span>
-                <p class="desc">${idea.why}</p>
+                <div class="desc"><b>Why it's viral:</b> <br>${idea.why}</div>
             `;
             output.appendChild(div);
         });
     } catch (e) {
-        // Fallback for Dec 23rd specifically
-        const fallback = [
-            {title: "IPL 2025 Auction: Why [Player Name] was a Steal", why: "Cricket fever is peaking after the record-breaking auction numbers."},
-            {title: "Pushpa 2: Ending Explained & Part 3 Theories", why: "The movie is dominating theaters right now; fans are hunting for hidden details."}
-        ];
-        output.innerHTML = `<p style="color:orange">API busy. Showing static Dec 23rd trends:</p>`;
-        fallback.forEach(f => {
-            output.innerHTML += `<div class="idea-card"><span class="title">${f.title}</span><p class="desc">${f.why}</p></div>`;
-        });
+        console.error(e);
+        output.innerHTML = `<p style="color:orange; text-align:center; width:100%;">AI is currently over-loaded with trend data. Please try again in 10 seconds!</p>`;
     } finally {
         loader.style.display = 'none';
     }
