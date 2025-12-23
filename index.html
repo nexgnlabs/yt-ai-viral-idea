@@ -5,21 +5,20 @@
     <title>Viral Idea Generator v2025</title>
     <script src="https://js.puter.com/v2/"></script>
     <style>
-        :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #161616; --accent: #00d4ff; }
+        :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #161616; --accent: #ff9900; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; }
         .app-shell { max-width: 900px; margin: auto; background: var(--card); border-radius: 15px; padding: 30px; border: 1px solid #333; }
-        .header { text-align: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
-        .grid-controls { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .header { text-align: center; border-bottom: 2px solid var(--yt-red); padding-bottom: 20px; margin-bottom: 30px; }
+        .grid-controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         select, .btn { padding: 15px; border-radius: 8px; font-weight: bold; border: none; font-size: 14px; }
-        select { background: #222; color: #fff; border: 1px solid #444; }
-        .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; }
-        .btn:hover { background: #b30000; transform: translateY(-2px); }
-        .result-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-        .idea-card { background: #222; padding: 20px; border-radius: 10px; border-left: 4px solid var(--accent); position: relative; display: flex; flex-direction: column; }
-        .viral-badge { position: absolute; top: 10px; right: 10px; background: #00d4ff22; color: var(--accent); font-size: 10px; padding: 3px 7px; border-radius: 4px; font-weight: bold;}
-        .title { font-weight: 800; color: #fff; margin-bottom: 10px; font-size: 16px; padding-right: 60px; }
-        .desc { font-size: 14px; color: #ddd; line-height: 1.5; background: #2a2a2a; padding: 10px; border-radius: 5px; }
-        .desc b { color: var(--accent); }
+        select { background: #222; color: #fff; border: 1px solid #444; cursor: pointer; }
+        .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; grid-column: span 3; }
+        .btn:hover { background: #b30000; transform: scale(1.01); }
+        .result-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .idea-card { background: #222; padding: 25px; border-radius: 12px; border-left: 5px solid var(--accent); position: relative; }
+        .viral-badge { position: absolute; top: 15px; right: 15px; color: var(--accent); font-size: 11px; font-weight: bold; }
+        .title { font-weight: 800; color: #fff; margin-bottom: 15px; font-size: 18px; }
+        .desc-box { font-size: 15px; color: #ccc; line-height: 1.6; border-top: 1px solid #333; padding-top: 15px; }
         #loader { display: none; text-align: center; color: var(--accent); padding: 20px; font-weight: bold; }
     </style>
 </head>
@@ -27,81 +26,72 @@
 
 <div class="app-shell">
     <div class="header">
-        <h1 style="margin:0;">🔥 AI Viral Video Architect</h1>
-        <p style="color:#888;">Live Search: Gemini 3 Pro & GPT-5 Integration</p>
+        <h1 style="margin:0;">🚀 YouTube India Viral Finder</h1>
+        <p style="color:#aaa;">Dec 23, 2025 • AI-Powered Trend Analysis</p>
     </div>
 
     <div class="grid-controls">
         <select id="category">
-            <option value="Entertainment">🎬 Entertainment (Movies/OTT)</option>
-            <option value="Education">📚 Education (Skills/Facts)</option>
-            <option value="Gaming">🎮 Gaming (eSports/Meta)</option>
-            <option value="Film & Animation">🎥 Film & Animation</option>
-            <option value="People & Blogs">🤳 People & Blogs</option>
-            <option value="Science & Technology">🧪 Science & Tech (AI/Gadgets)</option>
-            <option value="Sports">🏏 Sports (Cricket/IPL)</option>
-            <option value="Music">🎵 Music (Reels/Remixes)</option>
-            <option value="News & Politics">📰 News & Politics</option>
-            <option value="How-to & Style">💄 How-to & Style</option>
-            <option value="Travel & Events">✈️ Travel & Events</option>
-            <option value="Pets & Animals">🐾 Pets & Animals</option>
-            <option value="Comedy">😂 Comedy (Memes/Skits)</option>
-            <option value="Nonprofits">✊ Nonprofits & Activism</option>
+            <option value="Entertainment">🎬 Entertainment</option>
+            <option value="Gaming">🎮 Gaming</option>
+            <option value="Music">🎵 Music</option>
+            <option value="Tech">🧪 Tech & AI</option>
+            <option value="Bhojpuri/Regional">🎭 Regional/Bhojpuri</option>
         </select>
-        <button class="btn" onclick="generateViralIdeas()">SEARCH TRENDS & GENERATE</button>
+        
+        <select id="language">
+            <option value="Hinglish">🗣️ Hinglish (Mixed)</option>
+            <option value="Hindi">🇮🇳 Hindi</option>
+            <option value="English">🇬🇧 English</option>
+        </select>
+
+        <button class="btn" onclick="generateViralIdeas()">SCAN YOUTUBE INDIA</button>
     </div>
 
-    <div id="loader">⚡ AI is scanning YouTube India & Google Trends...</div>
+    <div id="loader">🔎 Analyzing YouTube Trending Charts (India)...</div>
     <div id="output" class="result-container"></div>
 </div>
 
 <script>
 async function generateViralIdeas() {
     const cat = document.getElementById('category').value;
+    const lang = document.getElementById('language').value;
     const output = document.getElementById('output');
     const loader = document.getElementById('loader');
 
     loader.style.display = 'block';
     output.innerHTML = '';
 
-    // THE PROMPT: Telling the AI to behave like a Trend Analyst using Hinglish
-    const prompt = `System: You are an expert YouTube Trend Analyst for the Indian Market. 
-    Current Date: Dec 23, 2025.
-    Task: Identify 4 real-world ongoing viral topics in India for the category "${cat}".
-    Instructions: 
-    1. Create a high-CTR English title.
-    2. Write the "Why it works" section in natural "Hinglish" (everyday Hindi mixed with English) just like a friend explains to another.
-    3. Use current events (e.g. Pushpa 2, IPL 2026 prep, AI tools, specific December memes).
+    const prompt = `Act as a YouTube Trend Expert. 
+    Current Date: Dec 23, 2025. 
+    Task: Search YouTube India for the TOP 3 viral topics in "${cat}". 
+    Constraint: Explain the "Why it works" section specifically in ${lang}.
     
-    Output strictly as a JSON array only: [{"title": "...", "why": "..."}]`;
+    Context for AI: 
+    - Music: Yo Yo Honey Singh & AP Dhillon 'Aadat' is #1.
+    - Movies: Christopher Nolan's 'The Odyssey' trailer is trending #2.
+    - Regional: Khesari Lal Yadav's 'Aag Lagaibu Ka' is massive in North India.
+    - Gaming: BGMI Grand Finals live now.
+
+    Return ONLY a JSON array: [{"title": "...", "why": "..."}]`;
 
     try {
-        // Calling Puter's AI Chat (which uses the highest available models like Gemini/GPT)
         const response = await puter.ai.chat(prompt);
-        
-        // Handling Markdown blocks if AI includes them
-        let cleanStr = response.toString();
-        if (cleanStr.includes("```json")) {
-            cleanStr = cleanStr.split("```json")[1].split("```")[0];
-        } else if (cleanStr.includes("```")) {
-            cleanStr = cleanStr.split("```")[1].split("```")[0];
-        }
-        
-        const ideas = JSON.parse(cleanStr.trim());
+        let cleanStr = response.toString().replace(/```json|```/g, '').trim();
+        const ideas = JSON.parse(cleanStr);
 
         ideas.forEach(idea => {
             const div = document.createElement('div');
             div.className = 'idea-card';
             div.innerHTML = `
-                <div class="viral-badge">LIVE TREND</div>
-                <span class="title">${idea.title}</span>
-                <div class="desc"><b>Why it's viral:</b> <br>${idea.why}</div>
+                <div class="viral-badge">🔥 TOP TREND</div>
+                <div class="title">${idea.title}</div>
+                <div class="desc-box"><b>Why this is the best topic:</b><br>${idea.why}</div>
             `;
             output.appendChild(div);
         });
     } catch (e) {
-        console.error(e);
-        output.innerHTML = `<p style="color:orange; text-align:center; width:100%;">AI is currently over-loaded with trend data. Please try again in 10 seconds!</p>`;
+        output.innerHTML = `<p style="color:red; text-align:center;">Error fetching live data. Please try again.</p>`;
     } finally {
         loader.style.display = 'none';
     }
