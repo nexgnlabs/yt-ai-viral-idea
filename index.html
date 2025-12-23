@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Viral Idea Generator v2025</title>
+    <title>General Viral Idea Generator v2025</title>
     <script src="https://js.puter.com/v2/"></script>
     <style>
-        :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #161616; --accent: #ff9900; }
+        :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #161616; --accent: #00d4ff; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; }
-        .app-shell { max-width: 900px; margin: auto; background: var(--card); border-radius: 15px; padding: 30px; border: 1px solid #333; }
+        .app-shell { max-width: 950px; margin: auto; background: var(--card); border-radius: 15px; padding: 30px; border: 1px solid #333; }
         .header { text-align: center; border-bottom: 2px solid var(--yt-red); padding-bottom: 20px; margin-bottom: 30px; }
-        .grid-controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .grid-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         select, .btn { padding: 15px; border-radius: 8px; font-weight: bold; border: none; font-size: 14px; }
         select { background: #222; color: #fff; border: 1px solid #444; cursor: pointer; }
-        .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; grid-column: span 3; }
+        .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; grid-column: span 2; }
         .btn:hover { background: #b30000; transform: scale(1.01); }
         .result-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
         .idea-card { background: #222; padding: 25px; border-radius: 12px; border-left: 5px solid var(--accent); position: relative; }
-        .viral-badge { position: absolute; top: 15px; right: 15px; color: var(--accent); font-size: 11px; font-weight: bold; }
-        .title { font-weight: 800; color: #fff; margin-bottom: 15px; font-size: 18px; }
+        .viral-badge { position: absolute; top: 15px; right: 15px; color: var(--accent); font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .title { font-weight: 800; color: #fff; margin-bottom: 15px; font-size: 18px; line-height: 1.4; }
         .desc-box { font-size: 15px; color: #ccc; line-height: 1.6; border-top: 1px solid #333; padding-top: 15px; }
         #loader { display: none; text-align: center; color: var(--accent); padding: 20px; font-weight: bold; }
     </style>
@@ -26,17 +26,26 @@
 
 <div class="app-shell">
     <div class="header">
-        <h1 style="margin:0;">🚀 YouTube India Viral Finder</h1>
-        <p style="color:#aaa;">Dec 23, 2025 • AI-Powered Trend Analysis</p>
+        <h1 style="margin:0;">💡 YouTube Content Architect</h1>
+        <p style="color:#aaa;">AI Suggestions based on 2025 Content Psychology</p>
     </div>
 
     <div class="grid-controls">
         <select id="category">
             <option value="Entertainment">🎬 Entertainment</option>
+            <option value="Education">🎓 Education</option>
             <option value="Gaming">🎮 Gaming</option>
+            <option value="Film & Animation">📽️ Film & Animation</option>
+            <option value="People & Blogs">🤳 People & Blogs</option>
+            <option value="Science & Technology">🧪 Science & Technology</option>
+            <option value="Sports">🏏 Sports</option>
             <option value="Music">🎵 Music</option>
-            <option value="Tech">🧪 Tech & AI</option>
-            <option value="Bhojpuri/Regional">🎭 Regional/Bhojpuri</option>
+            <option value="News & Politics">📰 News & Politics</option>
+            <option value="How-to & Style">💅 How-to & Style</option>
+            <option value="Travel & Events">✈️ Travel & Events</option>
+            <option value="Pets & Animals">🐾 Pets & Animals</option>
+            <option value="Comedy">😂 Comedy</option>
+            <option value="Nonprofits & Activism">✊ Nonprofits & Activism</option>
         </select>
         
         <select id="language">
@@ -45,15 +54,15 @@
             <option value="English">🇬🇧 English</option>
         </select>
 
-        <button class="btn" onclick="generateViralIdeas()">SCAN YOUTUBE INDIA</button>
+        <button class="btn" onclick="generateGeneralIdeas()">GET CREATIVE SUGGESTIONS</button>
     </div>
 
-    <div id="loader">🔎 Analyzing YouTube Trending Charts (India)...</div>
+    <div id="loader">🧠 Brainstorming creative concepts...</div>
     <div id="output" class="result-container"></div>
 </div>
 
 <script>
-async function generateViralIdeas() {
+async function generateGeneralIdeas() {
     const cat = document.getElementById('category').value;
     const lang = document.getElementById('language').value;
     const output = document.getElementById('output');
@@ -62,17 +71,15 @@ async function generateViralIdeas() {
     loader.style.display = 'block';
     output.innerHTML = '';
 
-    const prompt = `Act as a YouTube Trend Expert. 
-    Current Date: Dec 23, 2025. 
-    Task: Search YouTube India for the TOP 3 viral topics in "${cat}". 
-    Constraint: Explain the "Why it works" section specifically in ${lang}.
+    // General Expert Brainstorming Prompt (No Live Search)
+    const prompt = `Act as a Creative Director for a major YouTube Network. 
+    Task: Brainstorm TOP 3 creative and evergreen video ideas for the category "${cat}" specifically for an Indian audience.
+    Year: 2025.
+    Requirement: 
+    1. Title: High-CTR, catchy.
+    2. Why: Explain why this concept works for modern viewers in ${lang}.
+    Focus on psychological triggers like curiosity, nostalgia, or utility. Do NOT use current news; use general evergreen themes (e.g., "Day in the Life", "How AI changes X", "Mythbusting").
     
-    Context for AI: 
-    - Music: Yo Yo Honey Singh & AP Dhillon 'Aadat' is #1.
-    - Movies: Christopher Nolan's 'The Odyssey' trailer is trending #2.
-    - Regional: Khesari Lal Yadav's 'Aag Lagaibu Ka' is massive in North India.
-    - Gaming: BGMI Grand Finals live now.
-
     Return ONLY a JSON array: [{"title": "...", "why": "..."}]`;
 
     try {
@@ -84,14 +91,14 @@ async function generateViralIdeas() {
             const div = document.createElement('div');
             div.className = 'idea-card';
             div.innerHTML = `
-                <div class="viral-badge">🔥 TOP TREND</div>
+                <div class="viral-badge">💎 Evergreen Idea</div>
                 <div class="title">${idea.title}</div>
-                <div class="desc-box"><b>Why this is the best topic:</b><br>${idea.why}</div>
+                <div class="desc-box"><b>Concept Strategy:</b><br>${idea.why}</div>
             `;
             output.appendChild(div);
         });
     } catch (e) {
-        output.innerHTML = `<p style="color:red; text-align:center;">Error fetching live data. Please try again.</p>`;
+        output.innerHTML = `<p style="color:red; text-align:center;">Brainstorming interrupted. Please refresh and try again.</p>`;
     } finally {
         loader.style.display = 'none';
     }
