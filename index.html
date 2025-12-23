@@ -2,87 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AI YouTube Thumbnail Studio</title>
+    <title>Nano Banana Thumbnail Studio</title>
     <script src="https://js.puter.com/v2/"></script>
     <style>
-        :root { --yt-red: #ff0000; --bg: #0f0f0f; --card: #1e1e1e; --text: #ffffff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 40px; }
-        .app-container { width: 100%; max-width: 600px; background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #333; }
-        h2 { text-align: center; color: var(--yt-red); margin-top: 0; }
-        .input-group { margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; background: #000; border: 1px solid #444; border-radius: 8px; color: white; box-sizing: border-box; margin-top: 8px; }
-        .btn { width: 100%; padding: 15px; background: var(--yt-red); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn:hover { opacity: 0.8; transform: scale(0.98); }
-        .btn:disabled { background: #555; cursor: not-allowed; }
-        #preview-area { margin-top: 25px; min-height: 300px; border: 2px dashed #444; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        #preview-area img { width: 100%; height: auto; display: block; }
-        #loader { display: none; color: #00d4ff; font-weight: bold; }
+        :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #151515; --text: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+        .studio-card { width: 100%; max-width: 700px; background: var(--card); border-radius: 20px; padding: 30px; border: 1px solid #333; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .yt-logo { color: var(--yt-red); font-weight: bold; font-size: 24px; margin-bottom: 20px; text-align: center; }
+        .input-box { width: 100%; padding: 15px; background: #000; border: 1px solid #444; border-radius: 10px; color: white; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; }
+        .create-btn { width: 100%; padding: 16px; background: var(--yt-red); border: none; border-radius: 10px; color: white; font-weight: 900; cursor: pointer; letter-spacing: 1px; transition: 0.2s; }
+        .create-btn:hover { background: #cc0000; transform: scale(0.99); }
+        #canvas { margin-top: 25px; border-radius: 15px; overflow: hidden; background: #222; min-height: 380px; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid #333; }
+        #canvas img { width: 100%; height: auto; display: block; }
+        .loader { display: none; position: absolute; font-weight: bold; color: #00d4ff; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <h2>Thumbnail Studio</h2>
+<div class="studio-card">
+    <div class="yt-logo">🎥 NANO BANANA THUMBNAIL STUDIO</div>
     
-    <div class="input-group">
-        <label>What is your video about?</label>
-        <input type="text" id="videoTopic" placeholder="e.g. Solving a mystery in a dark forest">
-    </div>
+    <input type="text" id="userTopic" class="input-box" placeholder="Describe your video (e.g. iPhone 17 Unboxing, Scary Ghost Story)">
+    
+    <button class="create-btn" onclick="generateThumbnail()">GENERATE 4K THUMBNAIL</button>
 
-    <button class="btn" id="genBtn" onclick="generateThumbnail()">GENERATE THUMBNAIL</button>
-
-    <div id="preview-area">
-        <div id="loader">⚡ RENDERING 2025 AI VISUALS...</div>
+    <div id="canvas">
+        <div id="loadingText" class="loader">⚡ RENDERING VIRAL VISUALS...</div>
     </div>
 </div>
 
 <script>
-async function generateThumbnail() {
-    const topic = document.getElementById('videoTopic').value;
-    const btn = document.getElementById('genBtn');
-    const loader = document.getElementById('loader');
-    const preview = document.getElementById('preview-area');
+    async function generateThumbnail() {
+        const topic = document.getElementById('userTopic').value;
+        const canvas = document.getElementById('canvas');
+        const loader = document.getElementById('loadingText');
 
-    if (!topic) return alert("Please enter a topic!");
+        if (!topic) { alert("Please enter a video topic!"); return; }
 
-    // UI Updates
-    btn.disabled = true;
-    loader.style.display = 'block';
-    
-    // Clear old image but keep loader
-    const existingImg = preview.querySelector('img');
-    if(existingImg) existingImg.remove();
+        // UI State
+        loader.style.display = 'block';
+        const oldImg = canvas.querySelector('img');
+        if (oldImg) oldImg.remove();
 
-    // PROMPT ENGINEERING: 
-    // We wrap the user's topic in "Thumbnail Psychology" keywords
-    const masterPrompt = `Professional YouTube thumbnail, high-quality photography, 
-    subject: ${topic}, vivid colors, high contrast, dramatic cinematic lighting, 
-    blurred background for depth, sharp focus on center, 8k resolution, 
-    extremely detailed, eye-catching composition.`;
+        // AUTOMATIC PROMPT ENHANCEMENT
+        // This adds professional qualities to your simple input
+        const enhancedPrompt = `High-impact YouTube thumbnail, vivid colors, 
+        dramatic cinematic lighting, subject: ${topic}, 
+        blurred background for depth of field, sharp focus, 8k resolution, 
+        extremely detailed, clean composition for text placement.`;
 
-    try {
-        // We attempt the high-end Gemini 3 model first
-        const imageElement = await puter.ai.txt2img(masterPrompt, { 
-            model: "gemini-3-pro-image-preview" 
-        });
-        
-        preview.appendChild(imageElement);
-    } catch (error) {
-        console.warn("Gemini 3 Busy, using Stable Fallback...");
         try {
-            // Fallback for better reliability
-            const fallbackImg = await puter.ai.txt2img(masterPrompt, { 
-                model: "gpt-image-1.5" 
+            // Using your requested Nano Banana Model
+            const imageElement = await puter.ai.txt2img(enhancedPrompt, { 
+                model: "gemini-2.5-flash-image-preview" 
             });
-            preview.appendChild(fallbackImg);
-        } catch (err2) {
-            preview.innerHTML = `<p style="color:red">Error: AI engines overloaded. Try again in 30s.</p>`;
+            
+            canvas.appendChild(imageElement);
+        } catch (error) {
+            console.error(error);
+            canvas.innerHTML += `<p style="color:red; padding:20px;">Limit reached or Error. Please wait 1 minute.</p>`;
+        } finally {
+            loader.style.display = 'none';
         }
-    } finally {
-        btn.disabled = false;
-        loader.style.display = 'none';
     }
-}
 </script>
 
 </body>
