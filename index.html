@@ -5,32 +5,26 @@
     <title>Viral Idea Generator v2025</title>
     <script src="https://js.puter.com/v2/"></script>
     <style>
-        :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #161616; --accent: #00d4ff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; }
-        .app-shell { max-width: 800px; margin: auto; background: var(--card); border-radius: 15px; padding: 30px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .header { text-align: center; border-bottom: 2px solid var(--yt-red); padding-bottom: 20px; margin-bottom: 30px; }
-        .grid-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        select, .btn { padding: 15px; border-radius: 8px; font-weight: bold; border: none; font-size: 14px; box-sizing: border-box; }
-        select { background: #222; color: #fff; border: 1px solid #444; cursor: pointer; }
-        .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; grid-column: span 2; text-transform: uppercase; }
-        .btn:hover { background: #b30000; transform: scale(1.01); }
-        .btn:disabled { background: #555; cursor: not-allowed; }
-        .result-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .idea-card { background: #222; padding: 25px; border-radius: 12px; border-left: 5px solid var(--accent); animation: fadeIn 0.5s ease; }
-        .title { font-weight: 800; color: #fff; margin-bottom: 15px; font-size: 18px; display: block; }
-        .desc-box { font-size: 15px; color: #ccc; line-height: 1.6; border-top: 1px solid #333; padding-top: 15px; }
-        #loader { display: none; text-align: center; color: var(--accent); padding: 20px; font-weight: bold; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #1a1a1a; --accent: #00d4ff; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: #fff; padding: 20px; }
+        .app-shell { max-width: 800px; margin: auto; background: var(--card); border-radius: 12px; padding: 25px; border: 1px solid #333; }
+        .grid-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        select, .btn { padding: 12px; border-radius: 6px; font-weight: bold; border: 1px solid #444; font-size: 14px; }
+        select { background: #000; color: #fff; }
+        .btn { background: var(--yt-red); color: white; cursor: pointer; border: none; grid-column: span 2; }
+        .btn:hover { background: #cc0000; }
+        .btn:disabled { background: #444; cursor: not-allowed; }
+        .idea-card { background: #222; padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent); margin-bottom: 15px; }
+        .title { font-weight: bold; color: #fff; margin-bottom: 8px; display: block; font-size: 17px; }
+        .desc { font-size: 14px; color: #bbb; line-height: 1.5; }
+        #loader { display: none; text-align: center; color: var(--accent); margin: 15px 0; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
-    <div class="header">
-        <h1 style="margin:0;">🚀 Viral Content Architect</h1>
-        <p style="color:#aaa;">Gemini & GPT-5 Smart Suggestion Engine</p>
-    </div>
-
+    <h2 style="text-align:center; margin-top:0;">🚀 Viral Idea Architect</h2>
+    
     <div class="grid-controls">
         <select id="category">
             <option value="Entertainment">🎬 Entertainment</option>
@@ -50,74 +44,66 @@
         </select>
         
         <select id="language">
-            <option value="Hinglish (Mixed Hindi/English)">🗣️ Hinglish</option>
-            <option value="Formal Hindi">🇮🇳 Hindi</option>
-            <option value="Professional English">🇬🇧 English</option>
+            <option value="Hinglish">🗣️ Hinglish</option>
+            <option value="Hindi">🇮🇳 Hindi</option>
+            <option value="English">🇬🇧 English</option>
         </select>
 
-        <button class="btn" id="genBtn" onclick="generateIdeas()">Generate 3 Viral Concepts</button>
+        <button class="btn" id="genBtn" onclick="generate()">GENERATE IDEAS</button>
     </div>
 
-    <div id="loader">🧠 AI is brainstorming... please wait.</div>
-    <div id="output" class="result-container"></div>
+    <div id="loader">⚡ CONNECTING TO AI CLUSTER...</div>
+    <div id="output"></div>
 </div>
 
 <script>
-async function generateIdeas() {
-    const cat = document.getElementById('category').value;
-    const lang = document.getElementById('language').value;
-    const output = document.getElementById('output');
-    const loader = document.getElementById('loader');
+async function generate() {
     const btn = document.getElementById('genBtn');
-
-    loader.style.display = 'block';
+    const loader = document.getElementById('loader');
+    const output = document.getElementById('output');
+    
     btn.disabled = true;
+    loader.style.display = 'block';
     output.innerHTML = '';
 
-    const prompt = `Act as a YouTube Viral Strategist. 
-    Task: Brainstorm 3 unique and evergreen video ideas for the category "${cat}" for an Indian audience.
-    
-    Instructions:
-    - Language for "why": ${lang}.
-    - Focus on curiosity and high CTR.
-    - Output format MUST be a valid JSON array of objects only. No conversational text.
-    
-    Example JSON format:
-    [{"title": "Idea Title", "why": "Explanation here"}]`;
+    const cat = document.getElementById('category').value;
+    const lang = document.getElementById('language').value;
+
+    // ultra-simplified prompt to reduce AI "thinking" time
+    const prompt = `Return a JSON array with 3 viral YouTube ideas for "${cat}" in India. 
+    Explain "why" in ${lang}.
+    Format: [{"title":"...", "why":"..."}]
+    Strictly JSON only. No prose.`;
 
     try {
-        // Using gemini-2.5-flash for speed and reliability
-        const response = await puter.ai.chat(prompt, { model: 'gemini-2.5-flash' });
-        let rawText = response.toString();
+        // We use the standard chat which is more stable on Free Tier
+        const response = await puter.ai.chat(prompt);
+        let text = response.toString();
 
-        // BULLETPROOF PARSER: Find anything between [ and ]
-        const jsonMatch = rawText.match(/\[\s*{[\s\S]*}\s*\]/);
+        // SANITIZER: Remove backticks, markdown, or text before/after the JSON
+        const start = text.indexOf('[');
+        const end = text.lastIndexOf(']') + 1;
         
-        if (!jsonMatch) {
-            throw new Error("Invalid Format Received");
-        }
+        if (start === -1 || end === 0) throw new Error("No JSON found");
+        
+        const cleanJson = text.substring(start, end);
+        const ideas = JSON.parse(cleanJson);
 
-        const ideas = JSON.parse(jsonMatch[0]);
-
-        ideas.forEach(idea => {
+        ideas.forEach(item => {
             const div = document.createElement('div');
             div.className = 'idea-card';
-            div.innerHTML = `
-                <span class="title">${idea.title}</span>
-                <div class="desc-box"><b>Why this works:</b><br>${idea.why}</div>
-            `;
+            div.innerHTML = `<span class="title">${item.title}</span><div class="desc">${item.why}</div>`;
             output.appendChild(div);
         });
 
-    } catch (e) {
-        console.error(e);
-        output.innerHTML = `<div style="color:#ff4444; text-align:center; padding:20px; border:1px solid #ff4444; border-radius:8px;">
-            ⚠️ <b>AI Connection Busy</b><br>
-            The model is taking too long to respond. Please click the button again in 5 seconds.
+    } catch (err) {
+        console.error(err);
+        output.innerHTML = `<div style="color:#ff6b6b; text-align:center; padding:10px;">
+            ⚠️ <b>System Busy</b><br>Try switching the category or waiting 10 seconds.
         </div>`;
     } finally {
-        loader.style.display = 'none';
         btn.disabled = false;
+        loader.style.display = 'none';
     }
 }
 </script>
