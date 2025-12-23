@@ -2,110 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>India YouTube Trend Pulse v7.0</title>
+    <title>AI YouTube Thumbnail Studio</title>
     <script src="https://js.puter.com/v2/"></script>
     <style>
-        /* ALL CSS MUST STAY INSIDE THESE STYLE TAGS */
-        :root { --yt-red: #ff0000; --bg: #0d0d0d; --card: #1a1a1a; --text: #ffffff; --accent: #00d4ff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
-        .container { max-width: 850px; margin: auto; background: var(--card); border-radius: 12px; padding: 25px; border: 1px solid #333; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
-        .controls { display: flex; gap: 12px; margin-bottom: 20px; }
-        select { flex: 2; padding: 12px; background: #000; color: white; border: 1px solid #444; border-radius: 8px; }
-        .btn { flex: 1; background: var(--yt-red); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .trend-item { display: grid; grid-template-columns: 45px 1fr 100px; align-items: center; padding: 15px; background: #222; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--yt-red); }
-        .rank { font-size: 20px; font-weight: 900; color: var(--yt-red); }
-        .topic { font-size: 15px; font-weight: 500; }
-        .status-tag { font-size: 10px; background: #333; color: var(--accent); padding: 4px 8px; border-radius: 4px; text-align: center; }
-        #status { text-align: center; font-size: 13px; color: #888; margin-bottom: 10px; height: 20px; }
+        :root { --yt-red: #ff0000; --bg: #0f0f0f; --card: #1e1e1e; --text: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 40px; }
+        .app-container { width: 100%; max-width: 600px; background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #333; }
+        h2 { text-align: center; color: var(--yt-red); margin-top: 0; }
+        .input-group { margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #444; border-radius: 8px; color: white; box-sizing: border-box; margin-top: 8px; }
+        .btn { width: 100%; padding: 15px; background: var(--yt-red); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { opacity: 0.8; transform: scale(0.98); }
+        .btn:disabled { background: #555; cursor: not-allowed; }
+        #preview-area { margin-top: 25px; min-height: 300px; border: 2px dashed #444; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        #preview-area img { width: 100%; height: auto; display: block; }
+        #loader { display: none; color: #00d4ff; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h2 style="margin:0;">🇮🇳 India Hot 10 Hub</h2>
-        <div style="font-size: 12px; color: #888;">Live: Dec 23, 2025</div>
+<div class="app-container">
+    <h2>Thumbnail Studio</h2>
+    
+    <div class="input-group">
+        <label>What is your video about?</label>
+        <input type="text" id="videoTopic" placeholder="e.g. Solving a mystery in a dark forest">
     </div>
 
-    <div class="controls">
-        <select id="catSelect">
-            <option value="Trending Now">🔥 Trending Now</option>
-            <option value="Entertainment">🎬 Entertainment</option>
-            <option value="Education">📚 Education</option>
-            <option value="Gaming">🎮 Gaming</option>
-            <option value="Film & Animation">🎥 Film & Animation</option>
-            <option value="People & Blogs">🤳 People & Blogs</option>
-            <option value="Science & Technology">🧪 Science & Technology</option>
-            <option value="Sports">🏏 Sports</option>
-            <option value="Music">🎵 Music</option>
-            <option value="News & Politics">📰 News & Politics</option>
-            <option value="How-to & Style">💄 How-to & Style</option>
-            <option value="Travel & Events">✈️ Travel & Events</option>
-            <option value="Pets & Animals">🐾 Pets & Animals</option>
-            <option value="Comedy">😂 Comedy</option>
-            <option value="Nonprofits">✊ Nonprofits & Activism</option>
-        </select>
-        <button class="btn" onclick="fetchTrends()">ANALYZE TOP 10</button>
-    </div>
+    <button class="btn" id="genBtn" onclick="generateThumbnail()">GENERATE THUMBNAIL</button>
 
-    <div id="status"></div>
-    <div id="output"></div>
+    <div id="preview-area">
+        <div id="loader">⚡ RENDERING 2025 AI VISUALS...</div>
+    </div>
 </div>
 
 <script>
-    async function fetchTrends() {
-        const cat = document.getElementById('catSelect').value;
-        const status = document.getElementById('status');
-        const output = document.getElementById('output');
+async function generateThumbnail() {
+    const topic = document.getElementById('videoTopic').value;
+    const btn = document.getElementById('genBtn');
+    const loader = document.getElementById('loader');
+    const preview = document.getElementById('preview-area');
+
+    if (!topic) return alert("Please enter a topic!");
+
+    // UI Updates
+    btn.disabled = true;
+    loader.style.display = 'block';
+    
+    // Clear old image but keep loader
+    const existingImg = preview.querySelector('img');
+    if(existingImg) existingImg.remove();
+
+    // PROMPT ENGINEERING: 
+    // We wrap the user's topic in "Thumbnail Psychology" keywords
+    const masterPrompt = `Professional YouTube thumbnail, high-quality photography, 
+    subject: ${topic}, vivid colors, high contrast, dramatic cinematic lighting, 
+    blurred background for depth, sharp focus on center, 8k resolution, 
+    extremely detailed, eye-catching composition.`;
+
+    try {
+        // We attempt the high-end Gemini 3 model first
+        const imageElement = await puter.ai.txt2img(masterPrompt, { 
+            model: "gemini-3-pro-image-preview" 
+        });
         
-        status.innerText = "⚡ Syncing Dec 23rd Data...";
-        output.innerHTML = '';
-
-        const prompt = `Provide the TOP 10 one-liner YouTube trending topics for "${cat}" in India for TODAY Dec 23, 2025. 
-                        Focus on major events (e.g. Pushpa 2, IPL, Neeraj Chopra, Honey Singh collab). 
-                        Return exactly 10 lines in format: Rank | Topic Title | [REGION]`;
-
+        preview.appendChild(imageElement);
+    } catch (error) {
+        console.warn("Gemini 3 Busy, using Stable Fallback...");
         try {
-            const response = await puter.ai.chat(prompt, { model: 'gemini-2.5-flash' });
-            const lines = response.toString().split('\n').filter(l => l.includes('|')).slice(0, 10);
-            
-            lines.forEach(line => {
-                const [rank, topic, region] = line.split('|');
-                const div = document.createElement('div');
-                div.className = 'trend-item';
-                div.innerHTML = `
-                    <div class="rank">${rank.trim()}</div>
-                    <div class="topic">${topic.trim()}</div>
-                    <div class="status-tag">${region ? region.trim() : 'LIVE'}</div>
-                `;
-                output.appendChild(div);
+            // Fallback for better reliability
+            const fallbackImg = await puter.ai.txt2img(masterPrompt, { 
+                model: "gpt-image-1.5" 
             });
-            status.innerText = "✅ Analysis Complete";
-        } catch (e) {
-            status.innerText = "⚠️ Load high. Showing verified backup list.";
-            // High-Quality Backup for Dec 23, 2025
-            const backup = [
-                "AADAT: Yo Yo Honey Singh x AP Dhillon Official Track",
-                "Pushpa 2: The Rule - Day 18 Worldwide Collection",
-                "Neeraj Chopra & Vinesh Phogat meet PM Modi at PMO",
-                "IPL 2025 Auction: Full List of Sold Players",
-                "The Odyssey 2026: Official Teaser Breakdown",
-                "Squid Game Season 2: Final Trailer Review Hindi",
-                "MrBeast India: First 24-Hour Stats revealed",
-                "Kumbh Mela 2025: Grand Preparation in Prayagraj",
-                "Bangladesh Unrest: Latest Updates from Border",
-                "GTA 6: New Leaked Screenshots from Vice City"
-            ];
-            output.innerHTML = backup.map((t, i) => `
-                <div class="trend-item">
-                    <div class="rank">${i+1}</div>
-                    <div class="topic">${t}</div>
-                    <div class="status-tag">VERIFIED</div>
-                </div>
-            `).join('');
+            preview.appendChild(fallbackImg);
+        } catch (err2) {
+            preview.innerHTML = `<p style="color:red">Error: AI engines overloaded. Try again in 30s.</p>`;
         }
+    } finally {
+        btn.disabled = false;
+        loader.style.display = 'none';
     }
+}
 </script>
+
 </body>
 </html>
