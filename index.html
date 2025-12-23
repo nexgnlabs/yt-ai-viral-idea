@@ -2,32 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>General Viral Idea Generator v2025</title>
+    <title>Viral Idea Generator v2025</title>
     <script src="https://js.puter.com/v2/"></script>
     <style>
         :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #161616; --accent: #00d4ff; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; }
-        .app-shell { max-width: 950px; margin: auto; background: var(--card); border-radius: 15px; padding: 30px; border: 1px solid #333; }
+        .app-shell { max-width: 800px; margin: auto; background: var(--card); border-radius: 15px; padding: 30px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .header { text-align: center; border-bottom: 2px solid var(--yt-red); padding-bottom: 20px; margin-bottom: 30px; }
         .grid-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        select, .btn { padding: 15px; border-radius: 8px; font-weight: bold; border: none; font-size: 14px; }
+        select, .btn { padding: 15px; border-radius: 8px; font-weight: bold; border: none; font-size: 14px; box-sizing: border-box; }
         select { background: #222; color: #fff; border: 1px solid #444; cursor: pointer; }
-        .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; grid-column: span 2; }
+        .btn { background: var(--yt-red); color: white; cursor: pointer; transition: 0.3s; grid-column: span 2; text-transform: uppercase; }
         .btn:hover { background: #b30000; transform: scale(1.01); }
+        .btn:disabled { background: #555; cursor: not-allowed; }
         .result-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .idea-card { background: #222; padding: 25px; border-radius: 12px; border-left: 5px solid var(--accent); position: relative; }
-        .viral-badge { position: absolute; top: 15px; right: 15px; color: var(--accent); font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .title { font-weight: 800; color: #fff; margin-bottom: 15px; font-size: 18px; line-height: 1.4; }
+        .idea-card { background: #222; padding: 25px; border-radius: 12px; border-left: 5px solid var(--accent); animation: fadeIn 0.5s ease; }
+        .title { font-weight: 800; color: #fff; margin-bottom: 15px; font-size: 18px; display: block; }
         .desc-box { font-size: 15px; color: #ccc; line-height: 1.6; border-top: 1px solid #333; padding-top: 15px; }
         #loader { display: none; text-align: center; color: var(--accent); padding: 20px; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
     <div class="header">
-        <h1 style="margin:0;">💡 YouTube Content Architect</h1>
-        <p style="color:#aaa;">AI Suggestions based on 2025 Content Psychology</p>
+        <h1 style="margin:0;">🚀 Viral Content Architect</h1>
+        <p style="color:#aaa;">Gemini & GPT-5 Smart Suggestion Engine</p>
     </div>
 
     <div class="grid-controls">
@@ -49,58 +50,74 @@
         </select>
         
         <select id="language">
-            <option value="Hinglish">🗣️ Hinglish (Mixed)</option>
-            <option value="Hindi">🇮🇳 Hindi</option>
-            <option value="English">🇬🇧 English</option>
+            <option value="Hinglish (Mixed Hindi/English)">🗣️ Hinglish</option>
+            <option value="Formal Hindi">🇮🇳 Hindi</option>
+            <option value="Professional English">🇬🇧 English</option>
         </select>
 
-        <button class="btn" onclick="generateGeneralIdeas()">GET CREATIVE SUGGESTIONS</button>
+        <button class="btn" id="genBtn" onclick="generateIdeas()">Generate 3 Viral Concepts</button>
     </div>
 
-    <div id="loader">🧠 Brainstorming creative concepts...</div>
+    <div id="loader">🧠 AI is brainstorming... please wait.</div>
     <div id="output" class="result-container"></div>
 </div>
 
 <script>
-async function generateGeneralIdeas() {
+async function generateIdeas() {
     const cat = document.getElementById('category').value;
     const lang = document.getElementById('language').value;
     const output = document.getElementById('output');
     const loader = document.getElementById('loader');
+    const btn = document.getElementById('genBtn');
 
     loader.style.display = 'block';
+    btn.disabled = true;
     output.innerHTML = '';
 
-    // General Expert Brainstorming Prompt (No Live Search)
-    const prompt = `Act as a Creative Director for a major YouTube Network. 
-    Task: Brainstorm TOP 3 creative and evergreen video ideas for the category "${cat}" specifically for an Indian audience.
-    Year: 2025.
-    Requirement: 
-    1. Title: High-CTR, catchy.
-    2. Why: Explain why this concept works for modern viewers in ${lang}.
-    Focus on psychological triggers like curiosity, nostalgia, or utility. Do NOT use current news; use general evergreen themes (e.g., "Day in the Life", "How AI changes X", "Mythbusting").
+    const prompt = `Act as a YouTube Viral Strategist. 
+    Task: Brainstorm 3 unique and evergreen video ideas for the category "${cat}" for an Indian audience.
     
-    Return ONLY a JSON array: [{"title": "...", "why": "..."}]`;
+    Instructions:
+    - Language for "why": ${lang}.
+    - Focus on curiosity and high CTR.
+    - Output format MUST be a valid JSON array of objects only. No conversational text.
+    
+    Example JSON format:
+    [{"title": "Idea Title", "why": "Explanation here"}]`;
 
     try {
-        const response = await puter.ai.chat(prompt);
-        let cleanStr = response.toString().replace(/```json|```/g, '').trim();
-        const ideas = JSON.parse(cleanStr);
+        // Using gemini-2.5-flash for speed and reliability
+        const response = await puter.ai.chat(prompt, { model: 'gemini-2.5-flash' });
+        let rawText = response.toString();
+
+        // BULLETPROOF PARSER: Find anything between [ and ]
+        const jsonMatch = rawText.match(/\[\s*{[\s\S]*}\s*\]/);
+        
+        if (!jsonMatch) {
+            throw new Error("Invalid Format Received");
+        }
+
+        const ideas = JSON.parse(jsonMatch[0]);
 
         ideas.forEach(idea => {
             const div = document.createElement('div');
             div.className = 'idea-card';
             div.innerHTML = `
-                <div class="viral-badge">💎 Evergreen Idea</div>
-                <div class="title">${idea.title}</div>
-                <div class="desc-box"><b>Concept Strategy:</b><br>${idea.why}</div>
+                <span class="title">${idea.title}</span>
+                <div class="desc-box"><b>Why this works:</b><br>${idea.why}</div>
             `;
             output.appendChild(div);
         });
+
     } catch (e) {
-        output.innerHTML = `<p style="color:red; text-align:center;">Brainstorming interrupted. Please refresh and try again.</p>`;
+        console.error(e);
+        output.innerHTML = `<div style="color:#ff4444; text-align:center; padding:20px; border:1px solid #ff4444; border-radius:8px;">
+            ⚠️ <b>AI Connection Busy</b><br>
+            The model is taking too long to respond. Please click the button again in 5 seconds.
+        </div>`;
     } finally {
         loader.style.display = 'none';
+        btn.disabled = false;
     }
 }
 </script>
