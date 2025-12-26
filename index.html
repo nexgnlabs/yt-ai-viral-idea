@@ -65,6 +65,7 @@
         
         <select id="language">
             <option value="Hinglish (Natural day-to-day mix)">🗣️ Hinglish</option>
+            <option value="Simple day-to-day Marathi (Aplya bhashat)">🚩 Simple Marathi</option>
             <option value="Simple spoken Hindi (Asan Hindi)">🇮🇳 Easy Hindi</option>
             <option value="Global English">🇬🇧 English</option>
         </select>
@@ -148,7 +149,6 @@
                 errorBox.style.display = "block";
             } else if (data.candidates) {
                 let text = data.candidates[0].content.parts[0].text;
-                // Clean markdown if present
                 const jsonStr = text.substring(text.indexOf('['), text.lastIndexOf(']') + 1);
                 const ideas = JSON.parse(jsonStr);
 
