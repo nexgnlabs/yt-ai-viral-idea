@@ -3,45 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viral Idea Architect v4.0</title>
+    <title>Viral Idea Architect v5.0 (10 Ideas)</title>
     <style>
         :root { --yt-red: #ff0000; --bg: #0a0a0a; --card: #1a1a1a; --accent: #00d4ff; --success: #00e676; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: #fff; padding: 20px; }
-        .app-shell { max-width: 850px; margin: auto; background: var(--card); border-radius: 12px; padding: 25px; border: 1px solid #333; }
+        .app-shell { max-width: 900px; margin: auto; background: var(--card); border-radius: 12px; padding: 25px; border: 1px solid #333; }
         
         .usage-bar { text-align: center; font-size: 12px; margin-bottom: 15px; color: #888; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .usage-count { color: var(--success); font-weight: bold; }
 
         .api-setup { background: #000; padding: 15px; border-radius: 8px; border: 1px dashed #444; margin-bottom: 20px; }
-        .api-setup input { width: 100%; padding: 10px; background: #111; border: 1px solid #333; color: #fff; border-radius: 5px; margin-top: 5px; }
+        .api-setup input { width: 100%; padding: 10px; background: #111; border: 1px solid #333; color: #fff; border-radius: 5px; margin-top: 5px; box-sizing: border-box; }
 
-        .grid-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        select, .btn { padding: 12px; border-radius: 6px; font-weight: bold; border: 1px solid #444; font-size: 14px; background: #000; color: #fff; }
+        .grid-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        select, .btn { padding: 14px; border-radius: 8px; font-weight: bold; border: 1px solid #444; font-size: 14px; background: #000; color: #fff; box-sizing: border-box; }
         
-        .btn { background: var(--yt-red); color: white; cursor: pointer; border: none; grid-column: span 2; margin-top: 10px; transition: 0.3s; }
+        .btn { background: var(--yt-red); color: white; cursor: pointer; border: none; grid-column: span 2; margin-top: 10px; transition: 0.3s; font-size: 16px; }
         .btn:hover { background: #cc0000; transform: scale(1.01); }
         .btn:disabled { background: #444; cursor: not-allowed; }
 
-        .idea-card { background: #222; padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent); margin-bottom: 15px; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .idea-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
+        .idea-card { background: #222; padding: 20px; border-radius: 10px; border-left: 5px solid var(--accent); position: relative; }
+        .idea-number { position: absolute; top: 10px; right: 15px; font-size: 20px; font-weight: 900; color: #333; }
         
-        .title { font-weight: bold; color: #fff; margin-bottom: 8px; display: block; font-size: 17px; }
+        .title { font-weight: bold; color: #fff; margin-bottom: 8px; display: block; font-size: 18px; padding-right: 30px; }
         .desc { font-size: 14px; color: #bbb; line-height: 1.5; }
         
-        #loader { display: none; text-align: center; color: var(--accent); margin: 15px 0; font-size: 13px; font-weight: bold; }
+        #loader { display: none; text-align: center; color: var(--accent); margin: 20px 0; font-size: 14px; font-weight: bold; letter-spacing: 1px; }
         .error-msg { color: #ffbb00; background: #332200; padding: 15px; border-radius: 8px; border: 1px solid #ffbb00; text-align: center; margin-top: 15px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
-    <h2 style="text-align:center; margin-top:0;">🚀 Viral Idea Architect</h2>
+    <h2 style="text-align:center; margin-top:0; color: var(--yt-red);">🚀 Viral Idea Architect v5.0</h2>
     
-    <div class="usage-bar">Daily Usage: <span id="used" class="usage-count">0</span> / 5 Free Tiers</div>
+    <div class="usage-bar">Daily Usage: <span id="used" class="usage-count">0</span> / 5 Generations</div>
 
     <div class="api-setup">
-        <label style="font-size: 11px; color: var(--accent);">Gemini API Key</label>
-        <input type="password" id="apiKey" placeholder="Paste your API key here...">
+        <label style="font-size: 11px; color: var(--accent); text-transform: uppercase;">Gemini API Key</label>
+        <input type="password" id="apiKey" placeholder="Paste your Gemini API Key...">
     </div>
 
     <div class="grid-controls">
@@ -63,17 +64,17 @@
         </select>
         
         <select id="language">
-            <option value="Hinglish (Conversational mix)">🗣️ Hinglish</option>
-            <option value="Easy day-to-day Hindi">🇮🇳 Easy Hindi</option>
-            <option value="English">🇬🇧 English</option>
+            <option value="Hinglish (Natural day-to-day mix)">🗣️ Hinglish</option>
+            <option value="Simple spoken Hindi (Asan Hindi)">🇮🇳 Easy Hindi</option>
+            <option value="Global English">🇬🇧 English</option>
         </select>
 
-        <button class="btn" id="genBtn" onclick="generate()">GENERATE VIRAL IDEAS</button>
+        <button class="btn" id="genBtn" onclick="generate()">ARCHITECT 10 VIRAL IDEAS</button>
     </div>
 
-    <div id="loader">⚡ ARCHITECTING IDEAS...</div>
+    <div id="loader">⚡ ANALYZING TRENDS & GENERATING 10 IDEAS...</div>
     <div id="errorBox" class="error-msg"></div>
-    <div id="output"></div>
+    <div id="output" class="idea-grid"></div>
 </div>
 
 <script>
@@ -81,7 +82,7 @@
 
     window.onload = () => {
         updateUsageUI();
-        const savedKey = localStorage.getItem('_viral_idea_key_v4');
+        const savedKey = localStorage.getItem('_viral_v5_key');
         if (savedKey) document.getElementById('apiKey').value = savedKey;
     };
 
@@ -89,22 +90,23 @@
         const usage = getUsage();
         document.getElementById('used').innerText = usage;
         if (usage >= MAX_DAILY) {
-            document.getElementById('genBtn').disabled = true;
-            document.getElementById('genBtn').innerText = "DAILY LIMIT REACHED (5/5)";
+            const btn = document.getElementById('genBtn');
+            btn.disabled = true;
+            btn.innerText = "LIMIT REACHED (COME BACK TOMORROW)";
         }
     }
 
     function getUsage() {
         const date = new Date().toISOString().split('T')[0];
-        const data = JSON.parse(localStorage.getItem('_viral_usage_log_v4') || '{}');
+        const data = JSON.parse(localStorage.getItem('_viral_usage_v5') || '{}');
         return data[date] || 0;
     }
 
     function trackUsage() {
         const date = new Date().toISOString().split('T')[0];
-        const data = JSON.parse(localStorage.getItem('_viral_usage_log_v4') || '{}');
+        const data = JSON.parse(localStorage.getItem('_viral_usage_v5') || '{}');
         data[date] = (data[date] || 0) + 1;
-        localStorage.setItem('_viral_usage_log_v4', JSON.stringify(data));
+        localStorage.setItem('_viral_usage_v5', JSON.stringify(data));
         updateUsageUI();
     }
 
@@ -117,16 +119,19 @@
         const output = document.getElementById('output');
         const errorBox = document.getElementById('errorBox');
 
-        if (getUsage() >= MAX_DAILY) return alert("Bhai, daily limit finished. Come back tomorrow!");
-        if (!key) return alert("Please enter your API Key!");
+        if (getUsage() >= MAX_DAILY) return alert("Bhai, daily limit of 5 is over. Kal aana!");
+        if (!key) return alert("Please enter API Key!");
         
-        localStorage.setItem('_viral_idea_key_v4', key);
+        localStorage.setItem('_viral_v5_key', key);
         btn.disabled = true;
         loader.style.display = 'block';
         errorBox.style.display = 'none';
         output.innerHTML = '';
 
-        const prompt = `Return a JSON array with 3 viral YouTube ideas for "${cat}". Language: ${lang}. Use natural spoken style. Format: [{"title":"...", "why":"..."}]`;
+        const prompt = `Task: Generate exactly 10 unique, high-CTR viral YouTube video ideas for the category "${cat}". 
+        Language: ${lang}.
+        Style: Casual, day-to-day spoken language. No formal words.
+        Format: Return ONLY a valid JSON array of objects like this: [{"title":"...", "why":"..."}]`;
 
         try {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${key}`;
@@ -143,17 +148,23 @@
                 errorBox.style.display = "block";
             } else if (data.candidates) {
                 let text = data.candidates[0].content.parts[0].text;
-                const ideas = JSON.parse(text.substring(text.indexOf('['), text.lastIndexOf(']') + 1));
+                // Clean markdown if present
+                const jsonStr = text.substring(text.indexOf('['), text.lastIndexOf(']') + 1);
+                const ideas = JSON.parse(jsonStr);
 
-                ideas.forEach(item => {
+                ideas.forEach((item, index) => {
                     const div = document.createElement('div');
                     div.className = 'idea-card';
-                    div.innerHTML = `<span class="title">${item.title}</span><div class="desc">${item.why}</div>`;
+                    div.innerHTML = `
+                        <div class="idea-number">${index + 1}</div>
+                        <span class="title">${item.title}</span>
+                        <div class="desc">${item.why}</div>
+                    `;
                     output.appendChild(div);
                 });
                 trackUsage();
             } else {
-                throw new Error("API Issue. Check your key.");
+                throw new Error("API configuration error or key invalid.");
             }
         } catch (err) {
             errorBox.innerText = "Error: " + err.message;
